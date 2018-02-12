@@ -26,17 +26,17 @@ module.exports = function publish (args, flags, opts, cb) {
     )
       .then(filesArr => {
         const files = filesArr.reduce((arr, f) => arr.concat(f), [])
-        const yarnFlags = {
+        const adapterFlags = {
           access: flags.access || 'restricted',
-          'new-version': pkg.version
+          'new-version': adapter.name === 'yarn' ? pkg.version : undefined
         }
-        const yarnOpts = {
+        const adapterOpts = {
           quiet: flags.quiet
         }
 
         return Promise.all(
           files.map(dirPath => {
-            return adapter.cmd(dirPath, 'publish', yarnFlags, yarnOpts)
+            return adapter.cmd(dirPath, 'publish', adapterFlags, adapterOpts)
           })
         )
       })
