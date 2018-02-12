@@ -6,7 +6,10 @@ const spawn = require('../spawn')
 
 const SUPPORTED_COMMANDS = ['install', 'publish']
 
-exports.name = 'npm'
+exports.is = function is (name) {
+  return name === 'npm'
+}
+
 exports.cmd = function cmd (dirPath, command, flags, opts) {
   if (SUPPORTED_COMMANDS.indexOf(command) === -1) {
     return Promise.reject(new Error(`Unsupported npm command: ${command}`))
@@ -25,7 +28,7 @@ exports.cmd = function cmd (dirPath, command, flags, opts) {
 
   return spawn(pkg.name, 'npm', [command].concat(params), {
     cwd: dirPath,
-    quiet: opts.quiet
+    ...opts
   })
 }
 
